@@ -238,9 +238,6 @@ Speaker.prototype._flush = function () {
   debug('_flush()');
 
   // TODO: async definitely
-  binding.flush(this.audio_handle);
-
-  this.emit('flush');
 
   // XXX: The audio backends keep ~.5 seconds worth of buffered audio data
   // in their system, so presumably there will be .5 seconds *more* of audio data
@@ -261,6 +258,9 @@ Speaker.prototype._flush = function () {
 Speaker.prototype.close = function () {
   debug('close()');
   if (this._closed) return;
+
+  binding.flush(this.audio_handle);
+  this.emit('flush');
 
   if (this.audio_handle) {
     // TODO: async maybe?
